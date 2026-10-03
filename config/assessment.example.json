@@ -1,0 +1,16 @@
+{
+ "schema_version":"0.1.0",
+ "mode":"import-only",
+ "allow_network":false,
+ "allow_custom_collectors":false,
+ "authorized_targets":[],
+ "inputs":[],
+ "output_directory":"./private-output",
+ "evidence_policy":{
+  "max_age_hours":24,
+  "max_cross_source_skew_hours":4,
+  "note":"Illustrative operator-tunable limits, not vendor or framework requirements. A future importer must enforce and report the selected limits."
+ },
+ "limits":{"max_input_bytes":104857600,"max_records":250000,"max_json_depth":64},
+ "notes":"Design sample, not an implemented live-run configuration. Input producer/version, collection scope, hashes and time metadata must be explicit."
+}

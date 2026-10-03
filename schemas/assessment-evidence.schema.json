@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ScubaTank normalized assessment evidence 1.0.0",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "run_id", "synthetic", "manifest", "sources", "entities", "edges", "facts", "identity_links", "upstream_findings", "issues", "coverage", "observations"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"}, "run_id": {"type": "string", "format": "uuid"}, "synthetic": {"type": "boolean"},
+    "manifest": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}},
+    "sources": {"type": "array", "items": {"$ref": "#/$defs/source"}},
+    "entities": {"type": "array", "items": {"$ref": "#/$defs/entity"}},
+    "edges": {"type": "array", "items": {"$ref": "#/$defs/edge"}},
+    "facts": {"type": "array", "items": {"$ref": "#/$defs/fact"}},
+    "identity_links": {"type": "array", "items": {"$ref": "#/$defs/link"}},
+    "upstream_findings": {"type": "array", "items": {"$ref": "#/$defs/finding"}},
+    "issues": {"type": "array", "items": {"$ref": "#/$defs/issue"}},
+    "coverage": {"type": "array", "items": {"$ref": "#/$defs/coverage"}},
+    "observations": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["ref", "value"], "properties": {"ref": {"type": "string"}, "value": {}}}}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 1024},
+    "refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z][a-z0-9_-]{0,63}#(/.*)?$"}},
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "producer", "producer_version", "producer_schema", "adapter_version", "collected_at", "scope", "sha256", "path", "completeness", "collection_errors", "exclusions"],
+      "properties": {
+        "source_id": {"$ref": "#/$defs/id"}, "producer": {"type": "string"}, "producer_version": {"type": "string"}, "producer_schema": {"type": "string"}, "adapter_version": {"const": "1.0.0"},
+        "collected_at": {"type": "string", "format": "date-time"}, "scope": {"type": "object", "additionalProperties": false, "properties": {"tenant_id": {"type": "string", "format": "uuid"}, "forest_id": {"type": "string"}}},
+        "observation_window": {"type": "object", "additionalProperties": false, "required": ["oldest_at", "newest_at"], "properties": {"oldest_at": {"type": "string", "format": "date-time"}, "newest_at": {"type": "string", "format": "date-time"}}},
+        "collector_versions": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "minLength": 1}},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "path": {"type": "string", "minLength": 1},
+        "completeness": {"type": "object", "additionalProperties": false, "required": ["complete", "capabilities"], "properties": {"complete": {"type": "boolean"}, "capabilities": {"type": "array", "items": {"type": "string"}}}},
+        "collection_errors": {"type": "array"}, "exclusions": {"type": "array"}
+      }
+    },
+    "entity": {
+      "type": "object", "additionalProperties": false, "required": ["id", "kind", "boundary_id", "native_id", "label", "properties", "evidence_refs"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "kind": {"type": "string"}, "boundary_id": {"$ref": "#/$defs/id"}, "native_id": {"$ref": "#/$defs/id"}, "label": {"type": "string"}, "properties": {"type": "object"}, "evidence_refs": {"$ref": "#/$defs/refs"}}
+    },
+    "edge": {
+      "type": "object", "additionalProperties": false, "required": ["id", "source_id", "target_id", "type", "semantics", "semantics_version", "properties", "evidence_refs"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "source_id": {"$ref": "#/$defs/id"}, "target_id": {"$ref": "#/$defs/id"}, "type": {"type": "string"}, "semantics": {"enum": ["upstream-derived", "observed", "operator-attested", "unsupported"]}, "semantics_version": {"type": "string"}, "properties": {"type": "object"}, "evidence_refs": {"$ref": "#/$defs/refs"}}
+    },
+    "fact": {
+      "type": "object", "additionalProperties": false, "required": ["id", "subject_id", "predicate", "value", "semantics", "evidence_refs"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "subject_id": {"$ref": "#/$defs/id"}, "predicate": {"type": "string", "minLength": 1}, "value": {}, "semantics": {"enum": ["observed", "upstream-derived", "operator-attested"]}, "evidence_refs": {"$ref": "#/$defs/refs"}, "valid_from": {"type": "string", "format": "date-time"}, "valid_until": {"type": "string", "format": "date-time"}}
+    },
+    "link": {
+      "type": "object", "additionalProperties": false, "required": ["id", "ad_entity_id", "cloud_entity_id", "method", "conflict", "evidence_refs"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "ad_entity_id": {"$ref": "#/$defs/id"}, "cloud_entity_id": {"$ref": "#/$defs/id"}, "method": {"const": "established_id_link"}, "conflict": {"type": "boolean"}, "evidence_refs": {"$ref": "#/$defs/refs"}}
+    },
+    "finding": {
+      "type": "object", "additionalProperties": false, "required": ["id", "source_id", "policy_id", "product", "result", "criticality", "details", "annotations", "evidence_refs"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "source_id": {"$ref": "#/$defs/id"}, "policy_id": {"type": "string"}, "product": {"type": "string"}, "result": {"type": "string"}, "criticality": {"type": "string"}, "details": {"type": "string"}, "annotations": {"type": "object"}, "evidence_refs": {"$ref": "#/$defs/refs"}}
+    },
+    "issue": {
+      "type": "object", "additionalProperties": false, "required": ["code", "message", "entity_ids", "evidence_refs"],
+      "properties": {"code": {"type": "string"}, "message": {"type": "string"}, "source_id": {"type": "string"}, "entity_ids": {"type": "array", "items": {"type": "string"}}, "evidence_refs": {"type": "array", "items": {"type": "string"}}}
+    },
+    "coverage": {
+      "type": "object", "additionalProperties": false, "required": ["source_id", "capability", "complete", "reason"],
+      "properties": {"source_id": {"type": "string"}, "capability": {"type": "string"}, "complete": {"type": "boolean"}, "reason": {"type": "string"}}
+    }
+  }
+}

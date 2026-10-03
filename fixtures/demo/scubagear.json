@@ -1,0 +1,124 @@
+{
+  "MetaData": {
+    "TenantId": "11111111-1111-4111-8111-111111111111",
+    "DisplayName": "Synthetic example tenant",
+    "DomainName": "example.onmicrosoft.com",
+    "ProductSuite": "Microsoft 365",
+    "ProductsAssessed": [
+      "Azure Active Directory"
+    ],
+    "ProductAbbreviationMapping": {
+      "Azure Active Directory": "AAD"
+    },
+    "Tool": "ScubaGear",
+    "ToolVersion": "1.8.0",
+    "TimestampZulu": "2026-10-02T07:00:00Z",
+    "ReportUUID": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+  },
+  "Summary": {
+    "AAD": {
+      "Passes": 0,
+      "Failures": 1,
+      "Warnings": 0
+    }
+  },
+  "AnnotatedFailedPolicies": {},
+  "Results": {
+    "AAD": [
+      {
+        "GroupName": "Synthetic privileged-user protections",
+        "GroupNumber": "3",
+        "GroupReferenceURL": "https://github.com/cisagov/ScubaGear/blob/v1.8.0/PowerShell/ScubaGear/baselines/aad.md",
+        "Controls": [
+          {
+            "Control ID": "MS.AAD.3.1v1",
+            "Requirement": "Synthetic privileged-user authentication protection check.",
+            "Result": "Fail",
+            "Criticality": "Shall",
+            "Details": "Synthetic example: review the documented privileged-user protection scenario.",
+            "OmittedEvaluationResult": "N/A",
+            "OmittedEvaluationDetails": "N/A",
+            "IncorrectResult": "N/A",
+            "IncorrectResultDetails": "N/A",
+            "OriginalResult": "Fail",
+            "OriginalDetails": "Synthetic example only.",
+            "Comments": [
+              "Fixture, not a tenant observation."
+            ],
+            "ResolutionDate": null
+          }
+        ]
+      }
+    ]
+  },
+  "Raw": {
+    "module_version": "1.8.0",
+    "baseline_version": "1",
+    "timestamp_zulu": "2026-10-02T07:00:00Z",
+    "report_uuid": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+    "date": "10/02/2026",
+    "scuba_config": {
+      "ProductNames": [
+        "aad"
+      ],
+      "OrgName": "Synthetic fixture"
+    },
+    "tenant_details": [
+      {
+        "TenantId": "11111111-1111-4111-8111-111111111111",
+        "DisplayName": "Synthetic example tenant"
+      }
+    ],
+    "privileged_users": {
+      "00000000-0000-4000-8000-000000000002": {
+        "DisplayName": "Alex Admin",
+        "roles": [
+          "Global Administrator"
+        ],
+        "OnPremisesImmutableId": "AAAAAAAAAECAAAAAAAABAg=="
+      },
+      "00000000-0000-4000-8000-000000000003": {
+        "DisplayName": "Blair Cloud",
+        "roles": [
+          "Global Administrator"
+        ],
+        "OnPremisesImmutableId": "AAAAAAAAAECAAAAAAAABAw=="
+      }
+    },
+    "privileged_service_principals": {},
+    "privileged_roles": [
+      {
+        "DisplayName": "Global Administrator",
+        "RoleTemplateId": "62e90394-69f5-4237-9190-012177145e10",
+        "Assignments": [
+          {
+            "Id": "synthetic-active-2",
+            "PrincipalId": "00000000-0000-4000-8000-000000000002",
+            "AssignmentType": "Assigned",
+            "MemberType": "Direct",
+            "DirectoryScopeId": "/",
+            "StartDateTime": null,
+            "EndDateTime": null,
+            "RoleDefinitionId": "62e90394-69f5-4237-9190-012177145e10"
+          },
+          {
+            "Id": "synthetic-active-3",
+            "PrincipalId": "00000000-0000-4000-8000-000000000003",
+            "AssignmentType": "Assigned",
+            "MemberType": "Direct",
+            "DirectoryScopeId": "/",
+            "StartDateTime": null,
+            "EndDateTime": null,
+            "RoleDefinitionId": "62e90394-69f5-4237-9190-012177145e10"
+          }
+        ]
+      }
+    ],
+    "conditional_access_policies": [],
+    "aad_successful_commands": [
+      "Get-PrivilegedUser",
+      "Get-PrivilegedRole"
+    ],
+    "aad_unsuccessful_commands": []
+  }
+}

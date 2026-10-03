@@ -1,0 +1,18 @@
+{
+ "correlation/identity":{"providers":["scubagear","azurehound","bloodhound"],"gap":"Verify source-anchor and password-authority fields; use a reviewed Microsoft export only for missing fields."},
+ "correlation/sync":{"providers":["bloodhound","defender-identity","microsoft-exports"],"gap":"Confirm host/agent/tenant binding from supported configuration or inventory; no hostname guessing."},
+ "correlation/federation":{"providers":["scubagear","bloodhound","defender-identity","microsoft-exports"],"gap":"Issuer, PTA and SSO configuration or key-use metadata may need narrow reviewed exports; never extract secrets."},
+ "correlation/trust":{"providers":["sharphound","azurehound","bloodhound"],"gap":"Additional tenant, DNS or Application Proxy context needs scoped evidence; trust presence alone proves no path."},
+ "correlation/group":{"providers":["sharphound","azurehound","bloodhound","scubagear"],"gap":"Verify target-service nesting, provisioning and Conditional Access semantics rather than assuming transitive access."},
+ "correlation/application":{"providers":["azurehound","bloodhound","scubagear","microsoft-exports"],"gap":"Arc, Hybrid Worker and host credential-use boundaries require separate approved resource/host evidence."},
+ "correlation/certificate":{"providers":["sharphound","bloodhound","defender-identity","microsoft-exports"],"gap":"Use upstream AD CS semantics; separately verify CA host protection and Entra CBA trust and mapping."},
+ "correlation/kerberos":{"providers":["sharphound","bloodhound","defender-identity"],"gap":"Observed privileged sessions and recovery-copy metadata need explicit scope; do not request tickets or secrets."},
+ "correlation/host":{"providers":["sharphound","bloodhound","microsoft-sct","operator-attestation"],"gap":"Host methods, effective deny rights, network policy, virtualization and backup roles require explicit evidence."},
+ "correlation/policy":{"providers":["microsoft-sct","sharphound","bloodhound","defender-identity"],"gap":"Resultant policy and advisory applicability cannot be inferred from GPO links or an OS label alone."},
+ "correlation/visibility":{"providers":["scubagear","defender-identity","microsoft-exports","operator-attestation"],"gap":"Use approved telemetry and effective audit exports; no events in a quiet period is not proof of disabled logging."},
+ "correlation/recovery":{"providers":["azurehound","bloodhound","operator-attestation"],"gap":"Use existing backup-product reports and dated owner evidence; no backup extraction or recovery execution."},
+ "posture/directory":{"providers":["sharphound","bloodhound","pingcastle","defender-identity"],"gap":"Existing provider coverage must be checked per rule; no unreviewed replacement ACL scanner."},
+ "posture/auth":{"providers":["microsoft-sct","sharphound","pingcastle","defender-identity"],"gap":"Select the actual server role/build baseline and review missing effective authentication fields."},
+ "posture/server":{"providers":["microsoft-sct","defender-identity","microsoft-exports"],"gap":"Prefer approved host/configuration exports; do not apply baselines or invent patch applicability."},
+ "posture/operations":{"providers":["sharphound","defender-identity","pingcastle","operator-attestation"],"gap":"Owner, lifecycle, usage coverage and recovery attestations are not automatically available from a directory scan."}
+}

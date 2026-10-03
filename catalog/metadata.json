@@ -1,0 +1,13 @@
+{
+  "schema_version": "0.1.0",
+  "catalog_version": "0.1.0",
+  "as_of": "2026-10-02",
+  "expected_checks": 132,
+  "scope": "100 hybrid correlation specifications and 32 supporting posture specifications; not an exhaustive or implemented scanner",
+  "frameworks": {
+    "nist": "NIST SP 800-53 Rev. 5, release 5.2.0",
+    "attack": "Enterprise ATT&CK v19.2"
+  },
+  "mapping_status": "project-proposed; independent semantic review required",
+  "runtime_detectors_implemented": 0
+}

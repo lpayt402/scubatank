@@ -1,0 +1,306 @@
+{
+  "schema_version": "0.1.0",
+  "mapping_version": "0.1.0",
+  "reviewed_on": "2026-10-02",
+  "mapping_status": "project-proposed",
+  "review": {
+    "framework_identifiers": "verified-against-pinned-primary-data",
+    "mapping_semantics": "reviewed-with-limitations",
+    "rule_implementation": "reviewed-with-synthetic-regression-tests",
+    "live_environment_validation": "not-performed"
+  },
+  "frameworks": {
+    "attack": {
+      "name": "Enterprise ATT&CK",
+      "version": "19.2",
+      "source_commit": "6cda5ad8462c79e14fbb872f4e09059b18e0cfc4",
+      "source_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/enterprise-attack/enterprise-attack-19.2.json",
+      "sha256": "dc1639caa5501d720e280cf1cbd8fbe009884a0c9b3e6e9ed9d0c25166c3d8f4",
+      "license_url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/6cda5ad8462c79e14fbb872f4e09059b18e0cfc4/LICENSE.txt",
+      "attribution": "© 2026 The MITRE Corporation. This work is reproduced and distributed with the permission of The MITRE Corporation.",
+      "techniques": [
+        {
+          "id": "T1098",
+          "title": "Account Manipulation",
+          "stix_id": "attack-pattern--a10641f4-87b4-45a3-a906-92a149cb2c27",
+          "object_version": "2.8",
+          "modified": "2026-05-12T15:12:00.706Z",
+          "revoked": false,
+          "deprecated": false
+        },
+        {
+          "id": "T1078.002",
+          "title": "Domain Accounts",
+          "parent_title": "Valid Accounts",
+          "stix_id": "attack-pattern--c3d4bdd9-2cfe-4a80-9d0c-07a29ecdce8f",
+          "object_version": "2.0",
+          "modified": "2026-05-12T15:12:00.714Z",
+          "revoked": false,
+          "deprecated": false
+        },
+        {
+          "id": "T1078.004",
+          "title": "Cloud Accounts",
+          "parent_title": "Valid Accounts",
+          "stix_id": "attack-pattern--f232fa7a-025c-4d43-abc7-318e81a73d65",
+          "object_version": "2.0",
+          "modified": "2026-05-12T15:12:00.723Z",
+          "revoked": false,
+          "deprecated": false
+        },
+        {
+          "id": "T1556.007",
+          "title": "Hybrid Identity",
+          "parent_title": "Modify Authentication Process",
+          "stix_id": "attack-pattern--54ca26f3-c172-4231-93e5-ccebcac2161f",
+          "object_version": "2.0",
+          "modified": "2026-05-12T15:12:00.633Z",
+          "revoked": false,
+          "deprecated": false
+        },
+        {
+          "id": "T1098.007",
+          "title": "Additional Local or Domain Groups",
+          "parent_title": "Account Manipulation",
+          "stix_id": "attack-pattern--3e6831b2-bf4c-4ae6-b328-2e7c6633b291",
+          "object_version": "1.1",
+          "modified": "2025-09-26T18:25:02.290Z",
+          "revoked": false,
+          "deprecated": false
+        },
+        {
+          "id": "T1098.001",
+          "title": "Additional Cloud Credentials",
+          "parent_title": "Account Manipulation",
+          "stix_id": "attack-pattern--8a2f40cf-8325-47f9-96e4-b1ca4c7389bd",
+          "object_version": "2.8",
+          "modified": "2025-10-24T17:49:04.839Z",
+          "revoked": false,
+          "deprecated": false
+        }
+      ]
+    },
+    "nist": {
+      "name": "NIST SP 800-53 Rev. 5",
+      "version": "5.2.0",
+      "oscal_version": "1.1.3",
+      "content_release": "v1.4.0",
+      "source_commit": "bc8a528770033611df899b3d52703fb3dc91a20d",
+      "source_url": "https://raw.githubusercontent.com/usnistgov/oscal-content/bc8a528770033611df899b3d52703fb3dc91a20d/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json",
+      "sha256": "1645df6a370dcb931db2e2d5d70c2f77bc89c38499a416c23a70eb2c0e595bcc",
+      "license_url": "https://raw.githubusercontent.com/usnistgov/oscal-content/bc8a528770033611df899b3d52703fb3dc91a20d/LICENSE.md",
+      "controls": [
+        {
+          "id": "AC-3",
+          "title": "Access Enforcement"
+        },
+        {
+          "id": "AC-5",
+          "title": "Separation of Duties"
+        },
+        {
+          "id": "AC-6",
+          "title": "Least Privilege"
+        },
+        {
+          "id": "CM-5",
+          "title": "Access Restrictions for Change"
+        },
+        {
+          "id": "IA-2",
+          "title": "Identification and Authentication (Organizational Users)"
+        },
+        {
+          "id": "IA-5",
+          "title": "Authenticator Management"
+        },
+        {
+          "id": "SC-7",
+          "title": "Boundary Protection"
+        }
+      ]
+    }
+  },
+  "runtime": {
+    "name": "Open Policy Agent",
+    "version": "1.21.1",
+    "rego_version": "v1",
+    "release_url": "https://github.com/open-policy-agent/opa/releases/tag/v1.21.1",
+    "license": "Apache-2.0",
+    "windows_authenticode_status": "NotSigned",
+    "artifacts": [
+      {
+        "platform": "windows/amd64",
+        "name": "opa_windows_amd64.exe",
+        "sha256": "25406f7c6e147d687fd7fd546f835bafa160a6242c605ee94a23ba6cd7bccdcd",
+        "execution_tested": true
+      },
+      {
+        "platform": "linux/amd64",
+        "name": "opa_linux_amd64_static",
+        "sha256": "668506eb17a2eaa1fce6cc0d1f42ef85125d4ac5bda5fc74d1152d0c77145031",
+        "execution_tested": false
+      },
+      {
+        "platform": "darwin/amd64",
+        "name": "opa_darwin_amd64",
+        "sha256": "57a1127c8c67f819928c123163fafb307341bdb6ad543e680c0bbee7640783c5",
+        "execution_tested": false
+      },
+      {
+        "platform": "darwin/arm64",
+        "name": "opa_darwin_arm64",
+        "sha256": "a00a6469a0968c47c01137ed0dacaa88148be5d0eaa8524310cd371f3a98a169",
+        "execution_tested": false
+      }
+    ],
+    "download_url_prefix": "https://github.com/open-policy-agent/opa/releases/download/v1.21.1/",
+    "verification": "Windows bytes verified against both official GitHub asset digest and publisher companion .sha256; other platform digests are official release metadata and do not imply execution tests."
+  },
+  "rules": {
+    "ST.CORR.IDENTITY.001": {
+      "attack": [
+        {
+          "id": "T1098",
+          "rationale": "An evidenced AD reset authority can replace the source authenticator; account manipulation is a potential behavior, not an observed reset."
+        },
+        {
+          "id": "T1078.004",
+          "rationale": "The linked account has active cloud privilege and a supported AD password flow. Any cloud sign-in still requires its applicable authentication controls."
+        }
+      ],
+      "nist": [
+        {
+          "id": "AC-3",
+          "rationale": "Object-specific reset authority is an access enforcement decision."
+        },
+        {
+          "id": "AC-6",
+          "rationale": "Delegation to an unapproved controller expands the administrative account's privilege boundary."
+        },
+        {
+          "id": "IA-5",
+          "rationale": "The path exposes authority to replace a privileged user's source authenticator."
+        }
+      ]
+    },
+    "ST.CORR.IDENTITY.003": {
+      "attack": [
+        {
+          "id": "T1078.002",
+          "rationale": "The verified account carries effective AD control-plane membership; misuse of that domain account is potential behavior."
+        },
+        {
+          "id": "T1078.004",
+          "rationale": "The same linked identity carries an active privileged cloud role. The finding shows shared standing authority, not credential compromise or a successful sign-in."
+        }
+      ],
+      "nist": [
+        {
+          "id": "AC-5",
+          "rationale": "The shared identity is partial evidence relevant to separation of administrative duties; it does not establish the organization's full duties matrix."
+        },
+        {
+          "id": "AC-6",
+          "rationale": "Standing authority in both administration planes widens the consequence of account control."
+        }
+      ]
+    },
+    "ST.CORR.SYNC.001": {
+      "attack": [
+        {
+          "id": "T1556.007",
+          "rationale": "An unapproved local administrator controls confirmed tenant-linked synchronization infrastructure and could influence hybrid identity. No modification of the authentication process is claimed."
+        }
+      ],
+      "nist": [
+        {
+          "id": "AC-3",
+          "rationale": "Effective local administration establishes who can control the host."
+        },
+        {
+          "id": "AC-6",
+          "rationale": "An administrator outside the approved inventory exceeds the intended host control boundary."
+        },
+        {
+          "id": "SC-7",
+          "rationale": "This is contextual evidence relevant to protecting a hybrid administration boundary; host membership alone does not assess network interface filtering or satisfy SC-7."
+        }
+      ]
+    },
+    "ST.CORR.GROUP.001": {
+      "attack": [
+        {
+          "id": "T1098.007",
+          "rationale": "The prospective membership change occurs in an AD domain group. This title does not describe generic cloud group edits; its use here requires the evidenced AD AddMember step."
+        },
+        {
+          "id": "T1078.004",
+          "rationale": "An effective, sensitive target-service grant is connected to the synchronized group; use of resulting cloud account access is potential behavior."
+        }
+      ],
+      "nist": [
+        {
+          "id": "AC-3",
+          "rationale": "Source-group membership and an effective target-service grant are linked authorization decisions."
+        },
+        {
+          "id": "AC-6",
+          "rationale": "An unapproved source editor can change who receives sensitive cloud access."
+        }
+      ]
+    },
+    "ST.CORR.GROUP.006": {
+      "attack": [
+        {
+          "id": "T1098.007",
+          "rationale": "The evidenced source edit is to an AD domain group before synchronization. A cloud-only exclusion would require a different predicate."
+        },
+        {
+          "id": "T1078.004",
+          "rationale": "A supported, complete user/resource scenario establishes a protection gap after the source group edit; this is prospective cloud account use, not a claim MFA was bypassed in a live sign-in."
+        }
+      ],
+      "nist": [
+        {
+          "id": "AC-3",
+          "rationale": "The source group's edit authority changes an effective access-policy exclusion."
+        },
+        {
+          "id": "IA-2",
+          "rationale": "The scenario identifies the required authentication protection and whether another enabled policy restores it."
+        },
+        {
+          "id": "CM-5",
+          "rationale": "Unapproved source-group edits can change the effective authentication exception."
+        }
+      ]
+    },
+    "ST.CORR.APPLICATION.001": {
+      "attack": [
+        {
+          "id": "T1098.001",
+          "rationale": "The evidenced effective application-owner capability allows adding a usable workload credential; no credential is generated, retrieved, or exercised."
+        },
+        {
+          "id": "T1078.004",
+          "rationale": "The exact corresponding service principal has sensitive application permissions; workload account use is potential behavior. Delegated consent alone does not support this mapping."
+        }
+      ],
+      "nist": [
+        {
+          "id": "AC-3",
+          "rationale": "Application ownership and effective credential-write capability govern access to the workload identity."
+        },
+        {
+          "id": "AC-6",
+          "rationale": "Sensitive application permissions amplify a source-account control path into workload authority."
+        },
+        {
+          "id": "IA-5",
+          "rationale": "The owner can add an authenticator for the identified workload, subject to actual credential restrictions."
+        }
+      ]
+    }
+  }
+}

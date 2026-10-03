@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ScubaTank versioned finding",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "run_id", "rule_version", "framework_versions", "adapter_versions", "source_versions", "finding_id", "check_id", "status", "severity", "confidence", "coverage", "message", "evidence_refs", "affected_entity_ids", "missing_evidence", "mappings", "cause_id", "paths", "remediation", "limitations"],
+  "properties": {
+    "schema_version": {"const": "0.2.0"},
+    "run_id": {"$ref": "#/$defs/id"},
+    "rule_version": {"$ref": "#/$defs/text"},
+    "framework_versions": {"$ref": "#/$defs/versions"},
+    "adapter_versions": {"$ref": "#/$defs/versions"},
+    "source_versions": {"$ref": "#/$defs/versions"},
+    "finding_id": {"$ref": "#/$defs/id"},
+    "check_id": {"type": "string", "pattern": "^ST\\.(CORR|POST)\\.[A-Z]+\\.[0-9]{3}$"},
+    "status": {"enum": ["Pass", "Fail", "Unknown", "NotApplicable", "Error", "NotImplemented", "ReviewRequired"]},
+    "severity": {"enum": ["Low", "Medium", "High", "Critical"]},
+    "confidence": {"enum": ["Low", "Medium", "High", "Unknown"]},
+    "coverage": {"enum": ["complete", "partial", "unknown"]},
+    "message": {"$ref": "#/$defs/text"},
+    "evidence_refs": {"$ref": "#/$defs/evidenceRefs"},
+    "affected_entity_ids": {"$ref": "#/$defs/ids"},
+    "missing_evidence": {"$ref": "#/$defs/texts"},
+    "cause_id": {"$ref": "#/$defs/id"},
+    "limitations": {"$ref": "#/$defs/texts"},
+    "validation_state": {"enum": ["synthetic-tested", "not-validated", "live-validated"]},
+    "paths": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/path"}},
+    "remediation": {"type": "array", "maxItems": 100, "items": {"$ref": "#/$defs/action"}},
+    "mappings": {
+      "type": "object", "additionalProperties": false, "required": ["status", "nist", "attack"],
+      "properties": {
+        "status": {"$ref": "#/$defs/mappingStatus"},
+        "nist": {"type": "array", "maxItems": 100, "items": {"allOf": [{"$ref": "#/$defs/mapping"}, {"properties": {"id": {"pattern": "^[A-Z]{2}-[0-9]+(\\([0-9]+\\))?$"}}}]}},
+        "attack": {"type": "array", "maxItems": 100, "items": {"allOf": [{"$ref": "#/$defs/mapping"}, {"properties": {"id": {"pattern": "^T[0-9]{4}(\\.[0-9]{3})?$"}}}]}}
+      }
+    }
+  },
+  "allOf": [
+    {"if": {"properties": {"status": {"const": "Fail"}}}, "then": {"properties": {"evidence_refs": {"minItems": 1}, "affected_entity_ids": {"minItems": 1}, "missing_evidence": {"maxItems": 0}}}},
+    {"if": {"properties": {"status": {"const": "Unknown"}}}, "then": {"properties": {"missing_evidence": {"minItems": 1}}}},
+    {"if": {"properties": {"status": {"const": "Pass"}}}, "then": {"properties": {"coverage": {"const": "complete"}, "evidence_refs": {"minItems": 1}, "missing_evidence": {"maxItems": 0}}}}
+  ],
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 1024},
+    "text": {"type": "string", "minLength": 1, "maxLength": 20000},
+    "texts": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/text"}},
+    "ids": {"type": "array", "maxItems": 10000, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "evidenceRefs": {"type": "array", "maxItems": 10000, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 2048, "pattern": "^[^#\\s]+#(/([^~]|~[01])*)?$"}},
+    "versions": {"type": "object", "maxProperties": 100, "additionalProperties": {"$ref": "#/$defs/text"}},
+    "mappingStatus": {"enum": ["project-proposed", "independently-reviewed"]},
+    "mapping": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "title", "framework_version", "source_digest", "rationale", "status"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "title": {"$ref": "#/$defs/text"},
+        "framework_version": {"$ref": "#/$defs/text"},
+        "source_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "rationale": {"$ref": "#/$defs/text"}, "status": {"$ref": "#/$defs/mappingStatus"}
+      }
+    },
+    "path": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path_id", "entity_ids", "edge_ids", "evidence_refs", "claim", "limitations"],
+      "properties": {
+        "path_id": {"$ref": "#/$defs/id"}, "entity_ids": {"$ref": "#/$defs/ids"},
+        "edge_ids": {"$ref": "#/$defs/ids"}, "evidence_refs": {"$ref": "#/$defs/evidenceRefs"},
+        "claim": {"$ref": "#/$defs/text"}, "limitations": {"$ref": "#/$defs/texts"}
+      }
+    },
+    "action": {
+      "type": "object", "additionalProperties": false,
+      "required": ["action_id", "title", "rationale", "breaks_edge_ids", "affected_entity_ids", "evidence_refs", "owner", "exception"],
+      "properties": {
+        "action_id": {"$ref": "#/$defs/id"}, "title": {"$ref": "#/$defs/text"}, "rationale": {"$ref": "#/$defs/text"},
+        "breaks_edge_ids": {"$ref": "#/$defs/ids"}, "affected_entity_ids": {"$ref": "#/$defs/ids"},
+        "evidence_refs": {"$ref": "#/$defs/evidenceRefs"}, "owner": {"type": ["string", "null"], "maxLength": 20000},
+        "exception": {"type": ["string", "null"], "maxLength": 20000}
+      }
+    }
+  }
+}

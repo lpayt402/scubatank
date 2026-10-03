@@ -1,0 +1,46 @@
+{
+ "$schema":"https://json-schema.org/draft/2020-12/schema",
+ "title":"ScubaTank evidence bundle design contract",
+ "type":"object","additionalProperties":false,
+ "required":["schema_version","run_id","synthetic","sources","entities","relationships","facts"],
+ "properties":{
+  "schema_version":{"const":"0.1.0"},"run_id":{"type":"string","format":"uuid"},"synthetic":{"type":"boolean"},
+  "sources":{"type":"array","items":{"$ref":"#/$defs/source"}},
+  "entities":{"type":"array","items":{"$ref":"#/$defs/entity"}},
+  "relationships":{"type":"array","items":{"$ref":"#/$defs/relationship"}},
+  "facts":{"type":"array","items":{"$ref":"#/$defs/fact"}}
+ },
+ "$defs":{
+  "references":{"type":"array","minItems":1,"uniqueItems":true,"items":{"type":"string","minLength":1}},
+  "source":{
+   "type":"object","additionalProperties":false,
+   "required":["source_id","producer","producer_version","producer_schema","collected_at","scope","collection_status","sha256","relative_path"],
+   "properties":{
+    "source_id":{"type":"string","minLength":1},"producer":{"type":"string","minLength":1},
+    "producer_version":{"type":"string","minLength":1},"producer_schema":{"type":"string","minLength":1},
+    "collected_at":{"type":["string","null"],"format":"date-time"},
+    "scope":{"type":"object","required":["boundaries","complete"],"properties":{"boundaries":{"type":"array","items":{"type":"string"}},"complete":{"type":"boolean"}},"additionalProperties":true},
+    "collection_status":{"enum":["complete","partial","failed","not-collected"]},
+    "sha256":{"type":["string","null"],"pattern":"^[a-f0-9]{64}$"},
+    "relative_path":{"type":["string","null"],"minLength":1,"maxLength":4096}
+   },
+   "allOf":[
+    {"if":{"properties":{"collection_status":{"enum":["complete","partial"]}}},"then":{"properties":{"collected_at":{"type":"string"},"sha256":{"type":"string"},"relative_path":{"type":"string"}}}},
+    {"if":{"properties":{"collection_status":{"const":"not-collected"}}},"then":{"properties":{"collected_at":{"const":null},"sha256":{"const":null},"relative_path":{"const":null}}}},
+    {"if":{"properties":{"collection_status":{"enum":["partial","failed","not-collected"]}}},"then":{"properties":{"scope":{"properties":{"complete":{"const":false}}}}}}
+   ]
+  },
+  "entity":{
+   "type":"object","additionalProperties":false,"required":["entity_id","kind","boundary_id","native_id","evidence_refs"],
+   "properties":{"entity_id":{"type":"string","minLength":1},"kind":{"type":"string","minLength":1},"boundary_id":{"type":"string","minLength":1},"native_id":{"type":"string","minLength":1},"label":{"type":"string"},"evidence_refs":{"$ref":"#/$defs/references"}}
+  },
+  "relationship":{
+   "type":"object","additionalProperties":false,"required":["relationship_id","from","to","type","basis","semantics_version","evidence_refs","preconditions"],
+   "properties":{"relationship_id":{"type":"string","minLength":1},"from":{"type":"string","minLength":1},"to":{"type":"string","minLength":1},"type":{"type":"string","minLength":1},"basis":{"enum":["observed","upstream-derived","operator-attested","candidate"]},"semantics_version":{"type":"string","minLength":1},"evidence_refs":{"$ref":"#/$defs/references"},"preconditions":{"type":"array","items":{"type":"string"}}}
+  },
+  "fact":{
+   "type":"object","additionalProperties":false,"required":["fact_id","subject_id","predicate","value","evidence_refs"],
+   "properties":{"fact_id":{"type":"string","minLength":1},"subject_id":{"type":"string","minLength":1},"predicate":{"type":"string","minLength":1},"value":{},"evidence_refs":{"$ref":"#/$defs/references"}}
+  }
+ }
+}

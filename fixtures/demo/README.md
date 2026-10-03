@@ -1,0 +1,11 @@
+# Synthetic offline demonstration
+
+All identities, rights, inventory assertions and policy scenarios in this directory are invented. They contain no organization exports or credentials.
+
+The separate `scubagear-public-contract-excerpt.json` is an exception to the invented fixture data: it is a small excerpt of CISA's published ScubaGear 1.8.0 sample report, under CC0-1.0. It retains native metadata, one control ID/status and one public sample user record. Requirement/details prose is replaced with an explicit omission marker, and unrelated records are removed. It is a parser regression fixture and is excluded from the demonstration manifest. The original file is pinned to commit `2d01e711fcb74f615e1fbea6d06556a8dcbff11f`, path `PowerShell/ScubaGear/Sample-Reports/ScubaResults_fa5589b7-d528-4f80.json`, SHA-256 `8746a9ea9142d04ed80f957bf6cdc57e950da6fa9def1b1f16b79886311dee64`. [Original source](https://github.com/cisagov/ScubaGear/blob/2d01e711fcb74f615e1fbea6d06556a8dcbff11f/PowerShell/ScubaGear/Sample-Reports/ScubaResults_fa5589b7-d528-4f80.json), [upstream CC0 license](https://github.com/cisagov/ScubaGear/blob/2d01e711fcb74f615e1fbea6d06556a8dcbff11f/LICENSE).
+
+`scubagear.json` follows the ScubaGear 1.8.0 consolidated producer shape. `bloodhound.json` follows the BloodHound CE 9.7.1 Cypher graph serializer. `supplemental.json` supplies explicit synthetic operator verification, scope, approved-controller inventories, asset bindings and reviewed scenario evidence. It is not a Microsoft native export.
+
+The reference collection time is `2026-10-02T07:00:00Z`; use assessment time `2026-10-02T08:00:00Z` for deterministic demonstration results. Alex Admin has evidenced paths across all six bounded rules. Blair Cloud's cloud-authoritative password disproves the AD-password prerequisite. Devon Incomplete lacks active-role evidence and remains Unknown. Additional Unknown results identify linked identities whose group or application authority lacks supporting evidence.
+
+See [import formats](../../docs/import-formats.md) and [source pins](../../docs/source-pins.json) for the producer references and tested limits. Synthetic success does not establish live-environment correctness.

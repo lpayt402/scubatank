@@ -1,0 +1,14 @@
+{
+ "schema_version":"0.1.0",
+ "finding_id":"synthetic-example-only",
+ "check_id":"ST.CORR.IDENTITY.001",
+ "status":"Unknown",
+ "severity":"High",
+ "confidence":"Unknown",
+ "coverage":"partial",
+ "message":"The supplied records do not establish the password authority or a verified cross-directory identity link. No cloud takeover conclusion was made.",
+ "evidence_refs":[],
+ "affected_entity_ids":[],
+ "missing_evidence":["Verified AD-to-Entra identity link","Current password authority","Effective source-account reset permission"],
+ "mappings":{"status":"project-proposed","nist":["AC-3","AC-6","IA-5"],"attack":["T1098","T1078.004"]}
+}

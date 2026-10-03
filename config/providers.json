@@ -1,0 +1,16 @@
+{
+ "schema_version":"0.1.0",
+ "policy":"Offline import is implemented for three admitted contracts. Live collection remains disabled. Format validation uses synthetic fixtures and the pinned ScubaGear public contract excerpt; no live-environment validation is claimed.",
+ "providers":[
+  {"id":"scubagear","name":"CISA ScubaGear","role":"M365 baseline findings and collected configuration","source_id":"SCUBA","priority":"preferred","adapter_status":"implemented-offline","execution_enabled":false,"validated_versions":["1.8.0"],"validation_scope":"Consolidated JSON producer contract, synthetic fixtures and public contract excerpt","live_validation":false},
+  {"id":"sharphound","name":"SpecterOps SharpHound","role":"AD relationships and supported host/AD CS collection","source_id":"SHARPHOUND","priority":"preferred","adapter_status":"planned","execution_enabled":false,"validated_versions":[]},
+  {"id":"azurehound","name":"SpecterOps AzureHound","role":"Entra and optionally scoped Azure relationship collection","source_id":"AZUREHOUND","priority":"preferred","adapter_status":"planned","execution_enabled":false,"validated_versions":[]},
+  {"id":"bloodhound","name":"BloodHound","role":"Supported derived permission and graph semantics","source_id":"BH","priority":"preferred","adapter_status":"implemented-offline","execution_enabled":false,"validated_versions":["9.7.1"],"validation_scope":"Saved processed Cypher graph response, pinned serializer and synthetic fixtures","live_validation":false},
+  {"id":"microsoft-sct","name":"Microsoft Security Compliance Toolkit","role":"Baseline comparison and export-only policy operations","source_id":"MS-SCT","priority":"preferred","adapter_status":"planned","execution_enabled":false,"validated_versions":[]},
+  {"id":"microsoft-exports","name":"Supported Microsoft exports and APIs","role":"Narrow missing-field evidence only after gap review; no broad replacement scanner","source_id":"MS-BASELINE","priority":"gap-review-required","adapter_status":"planned","execution_enabled":false,"validated_versions":[]},
+  {"id":"defender-identity","name":"Microsoft Defender for Identity","role":"Optional existing posture and coverage evidence","source_id":"MDI","priority":"optional-existing-deployment","adapter_status":"planned","execution_enabled":false,"validated_versions":[]},
+  {"id":"pingcastle","name":"Netwrix PingCastle","role":"Operator-supplied licensed posture reports; no bundling or default execution","source_id":"PINGCASTLE","priority":"optional-license-review","adapter_status":"planned","execution_enabled":false,"validated_versions":[]},
+  {"id":"purple-knight","name":"Semperis Purple Knight","role":"Optional supplied evidence after edition, terms and export-format review","source_id":"PURPLE-KNIGHT","priority":"optional-license-review","adapter_status":"planned","execution_enabled":false,"validated_versions":[]},
+  {"id":"operator-attestation","name":"Owner-approved evidence","role":"Dated identity links, inventories and reviewed operational scenarios","source_id":"MS-FOREST-RECOVERY","priority":"assisted-evidence","adapter_status":"implemented-offline","execution_enabled":false,"validated_versions":["1.0.0"],"validation_scope":"ScubaTank assisted-evidence schema and synthetic fixtures","live_validation":false}
+ ]
+}

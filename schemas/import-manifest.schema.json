@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ScubaTank offline import manifest 1.0.0",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "synthetic", "sources"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"}, "synthetic": {"type": "boolean"},
+    "sources": {"type": "array", "minItems": 1, "maxItems": 32, "items": {"$ref": "#/$defs/source"}}
+  },
+  "$defs": {
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "producer", "producer_version", "producer_schema", "path", "scope", "completeness"],
+      "properties": {
+        "source_id": {"type": "string", "pattern": "^[a-z][a-z0-9_-]{0,63}$"},
+        "producer": {"enum": ["scubagear", "bloodhound-ce", "operator-evidence"]},
+        "producer_version": {"type": "string", "minLength": 1},
+        "producer_schema": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "collected_at": {"type": "string", "format": "date-time"},
+        "observation_window": {"type": "object", "additionalProperties": false, "required": ["oldest_at", "newest_at"], "properties": {"oldest_at": {"type": "string", "format": "date-time"}, "newest_at": {"type": "string", "format": "date-time"}}},
+        "collector_versions": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "minLength": 1}},
+        "scope": {
+          "type": "object", "additionalProperties": false, "minProperties": 1,
+          "properties": {"tenant_id": {"type": "string", "format": "uuid"}, "forest_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"}}
+        },
+        "completeness": {
+          "type": "object", "additionalProperties": false, "required": ["complete", "capabilities"],
+          "properties": {"complete": {"type": "boolean"}, "capabilities": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}}
+        },
+        "collection_errors": {"type": "array", "items": {}}, "exclusions": {"type": "array", "items": {}}
+      }
+    }
+  }
+}

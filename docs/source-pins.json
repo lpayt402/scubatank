@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0.0",
+  "reviewed_at": "2026-10-02",
+  "purpose": "Offline source-format admission; collector execution is disabled.",
+  "sources": [
+    {
+      "producer": "scubagear",
+      "version": "1.8.0",
+      "adapter_version": "1.0.0",
+      "schema": "scubagear-consolidated-1.8.0",
+      "publisher": "CISA",
+      "repository": "https://github.com/cisagov/ScubaGear",
+      "release": "https://github.com/cisagov/ScubaGear/releases/tag/v1.8.0",
+      "source_commit": "2d01e711fcb74f615e1fbea6d06556a8dcbff11f",
+      "reviewed_source_archive": "https://api.github.com/repos/cisagov/ScubaGear/tarball/v1.8.0",
+      "source_archive_sha256": "d8db6ce4754096bf78df1726838f8e308371f2ce363401187c20fb0e361e05a1",
+      "license": "CC0-1.0; review individual attributed baseline content separately",
+      "license_url": "https://github.com/cisagov/ScubaGear/blob/2d01e711fcb74f615e1fbea6d06556a8dcbff11f/LICENSE",
+      "native_contracts": [
+        {"path": "PowerShell/ScubaGear/Modules/Orchestrator.psm1", "symbol": "Merge-JsonOutput", "sha256": "b6a2e2f136e1c1219be62dc3e10323ea897161d577c61e5887222f1c8476015a"},
+        {"path": "PowerShell/ScubaGear/Sample-Reports/ScubaResults_fa5589b7-d528-4f80.json", "sha256": "8746a9ea9142d04ed80f957bf6cdc57e950da6fa9def1b1f16b79886311dee64"}
+      ],
+      "validation": {"synthetic_fixture": "fixtures/demo/scubagear.json", "committed_public_contract_excerpt": "fixtures/demo/scubagear-public-contract-excerpt.json", "official_public_example_import": "92 preserved controls, 6 stable entities, 0 supported direct active role facts, no parser issues", "live_tenant_validation": false},
+      "required_permissions_for_import": "Read local authorized JSON files only",
+      "side_effects": "Local evidence/report output only; no source tool installation, launch, authentication or network request",
+      "limitations": ["Only consolidated ScubaResults JSON from 1.8.0 is admitted", "Missing Raw does not establish subject-specific policy or role facts", "Only direct active Global Administrator and Privileged Role Administrator schedules are normalized for this milestone", "Eligible, expired, future, group-mediated and missing-boundary schedules do not establish active user authority"]
+    },
+    {
+      "producer": "bloodhound-ce",
+      "version": "9.7.1",
+      "adapter_version": "1.0.0",
+      "schema": "bloodhound-cypher-9.7.1",
+      "publisher": "SpecterOps",
+      "repository": "https://github.com/SpecterOps/BloodHound",
+      "release": "https://github.com/SpecterOps/BloodHound/releases/tag/v9.7.1",
+      "tag_object": "8c74f5edfb40c3c5f2debf028044ef3a2d241984",
+      "source_commit": "1219d5020352051f4169a23e19f6040579d2ac39",
+      "reviewed_source_archive": "https://api.github.com/repos/SpecterOps/BloodHound/tarball/v9.7.1",
+      "source_archive_sha256": "b4cea76b4c8fa97fbf02dda50434e551070958ee2f7249f99b5a911f4650daa6",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/SpecterOps/BloodHound/blob/1219d5020352051f4169a23e19f6040579d2ac39/LICENSE",
+      "native_contracts": [
+        {"path": "cmd/api/src/model/unified_graph.go", "symbols": ["UnifiedGraphWPropertyKeys", "UnifiedNode", "UnifiedEdge"], "sha256": "4962fde10f08f01231ed2e5b49ea073f31204056bddd3f72e05d68f020e427d7"},
+        {"path": "packages/go/openapi/src/paths/cypher.graphs.cypher.yaml", "endpoint": "POST /api/v2/graphs/cypher", "sha256": "a6f7bcb5a2ef1d9ddd67ee74ef337853bfcf292a84c0cbd012e225ad08704a8f"},
+        {"path": "packages/go/openapi/src/schemas/model.unified-graph.graph.w.property.keys.yaml"},
+        {"path": "packages/go/openapi/src/schemas/model.unified-graph.node.yaml"},
+        {"path": "packages/go/openapi/src/schemas/model.unified-graph.edge.yaml"}
+      ],
+      "validation": {"synthetic_fixture": "fixtures/demo/bloodhound.json", "producer_serialization_review": true, "live_engine_export_validation": false, "collector_versions_in_demo": {"SharpHound": "synthetic-not-executed", "AzureHound": "synthetic-not-executed"}},
+      "required_permissions_for_import": "Read a saved authorized Cypher API response only; BloodHound collection/query permissions are separately operator managed",
+      "side_effects": "No BloodHound process, database, credentials or network request needed for import",
+      "limitations": ["Requires already processed graph relationships, not raw SharpHound ZIP or AzureHound collector JSON", "Graph query completeness is declared by the operator and does not establish absence of unreturned relationships", "lastSeen is retained but never substituted for collection time", "Cross-forest authority and unsupported relationship types are not evaluated", "Producer version comes from the pinned operator installation declaration; the native response does not include engine version"]
+    },
+    {
+      "producer": "operator-evidence",
+      "version": "1.0.0",
+      "adapter_version": "1.0.0",
+      "schema": "operator-evidence-1.0.0",
+      "license": "Original ScubaTank schema and synthetic fixtures, MIT",
+      "validation": {"synthetic_fixture": "fixtures/demo/supplemental.json", "live_platform_export_validation": false},
+      "limitations": ["Assisted evidence with explicit raw hashed records, not a Microsoft exporter adapter", "Source-anchor and group-SID verification are operator attestations", "Combined Conditional Access scenario is a dated owner-reviewed attestation, not a ScubaTank simulator or a validated Graph evaluation exporter"]
+    }
+  ]
+}

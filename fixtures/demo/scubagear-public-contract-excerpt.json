@@ -1,0 +1,79 @@
+{
+  "MetaData": {
+    "TenantId": "ca08493a-c9c8-4db0-a9e8-d3b4bafac269",
+    "DisplayName": "tqhjy",
+    "DomainName": "tqhjy.onmicrosoft.com",
+    "ProductSuite": "Microsoft 365",
+    "ProductsAssessed": [
+      "Azure Active Directory",
+      "Microsoft 365 Defender",
+      "Exchange Online",
+      "Microsoft Power Platform",
+      "SharePoint Online",
+      "Microsoft Teams"
+    ],
+    "ProductAbbreviationMapping": {
+      "Microsoft 365 Defender": "Defender",
+      "SharePoint Online": "SharePoint",
+      "Azure Active Directory": "AAD",
+      "Microsoft Power Platform": "PowerPlatform",
+      "Microsoft Teams": "Teams",
+      "Exchange Online": "EXO"
+    },
+    "Tool": "ScubaGear",
+    "ToolVersion": "1.8.0",
+    "TimestampZulu": "2026-05-04T17:15:48.307Z",
+    "ReportUUID": "fa5589b7-d528-4f80-8e7d-5c20eda7b6d8"
+  },
+  "Summary": {},
+  "AnnotatedFailedPolicies": {},
+  "Results": {
+    "AAD": [
+      {
+        "GroupName": "[Public contract excerpt]",
+        "GroupNumber": "1",
+        "GroupReferenceURL": "https://github.com/cisagov/ScubaGear/blob/v1.8.0/PowerShell/ScubaGear/baselines/aad.md#1-legacy-authentication",
+        "Controls": [
+          {
+            "Control ID": "MS.AAD.1.1v1",
+            "Requirement": "[Policy prose omitted from public contract excerpt]",
+            "Result": "Pass",
+            "Criticality": "Shall",
+            "Details": "[Policy prose omitted from public contract excerpt]",
+            "OmittedEvaluationResult": "N/A",
+            "OmittedEvaluationDetails": "[Policy prose omitted from public contract excerpt]",
+            "IncorrectResult": "N/A",
+            "IncorrectResultDetails": "[Policy prose omitted from public contract excerpt]",
+            "OriginalResult": "Pass",
+            "OriginalDetails": "[Policy prose omitted from public contract excerpt]",
+            "Comments": [],
+            "ResolutionDate": null
+          }
+        ]
+      }
+    ]
+  },
+  "Raw": {
+    "module_version": "1.8.0",
+    "baseline_version": "1",
+    "date": "05/04/2026 17:15:48 Coordinated Universal Time",
+    "timestamp_zulu": "2026-05-04T17:15:48.307Z",
+    "report_uuid": "fa5589b7-d528-4f80-8e7d-5c20eda7b6d8",
+    "privileged_users": {
+      "66b4d5c2-71c9-4644-8728-74e3a8324d81": {
+        "DisplayName": "John Public",
+        "roles": [
+          "Hybrid Identity Administrator",
+          "Privileged Role Administrator",
+          "Application Administrator",
+          "Exchange Administrator",
+          "User Administrator",
+          "Cloud Application Administrator",
+          "Global Administrator",
+          "SharePoint Administrator"
+        ],
+        "OnPremisesImmutableId": null
+      }
+    }
+  }
+}

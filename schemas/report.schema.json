@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ScubaTank traceable assessment report",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "run_id", "generated_at", "framework_versions", "adapter_versions", "source_versions", "scope", "synthetic", "coverage", "limitations", "sources", "entities", "edges", "identity_links", "evidence", "upstream_findings", "findings", "remediation", "counts"],
+  "properties": {
+    "schema_version": {"const": "0.2.0"},
+    "run_id": {"$ref": "finding-v2.schema.json#/$defs/id"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "framework_versions": {"$ref": "finding-v2.schema.json#/$defs/versions"},
+    "adapter_versions": {"$ref": "finding-v2.schema.json#/$defs/versions"},
+    "source_versions": {"$ref": "finding-v2.schema.json#/$defs/versions"},
+    "scope": {"type": "object", "maxProperties": 100},
+    "synthetic": {"type": "boolean"},
+    "coverage": {"enum": ["complete", "partial", "unknown"]},
+    "limitations": {"$ref": "finding-v2.schema.json#/$defs/texts"},
+    "sources": {"type": "array", "maxItems": 1000, "items": {"$ref": "#/$defs/source"}},
+    "entities": {"type": "array", "maxItems": 100000, "items": {"$ref": "#/$defs/entity"}},
+    "edges": {"type": "array", "maxItems": 100000, "items": {"$ref": "#/$defs/edge"}},
+    "identity_links": {"type": "array", "maxItems": 100000, "items": {"$ref": "#/$defs/identityLink"}},
+    "evidence": {"type": "object", "maxProperties": 200000, "propertyNames": {"type": "string", "pattern": "^[^#\\s]+#(/([^~]|~[01])*)?$"}, "additionalProperties": {"$ref": "#/$defs/evidence"}},
+    "upstream_findings": {"type": "array", "maxItems": 100000, "items": {"type": "object", "required": ["id", "source_id", "policy_id", "product", "result", "criticality", "details", "annotations", "evidence_refs"], "properties": {"id": {"$ref": "finding-v2.schema.json#/$defs/id"}, "source_id": {"$ref": "finding-v2.schema.json#/$defs/id"}, "policy_id": {"$ref": "finding-v2.schema.json#/$defs/text"}, "product": {"$ref": "finding-v2.schema.json#/$defs/text"}, "result": {"type": "string", "maxLength": 20000}, "criticality": {"type": "string", "maxLength": 20000}, "details": {"type": "string", "maxLength": 20000}, "annotations": {"type": "object"}, "evidence_refs": {"$ref": "finding-v2.schema.json#/$defs/evidenceRefs"}}}},
+    "findings": {"type": "array", "maxItems": 5000, "items": {"$ref": "finding-v2.schema.json"}},
+    "remediation": {"type": "array", "maxItems": 10000, "items": {"$ref": "#/$defs/summaryAction"}},
+    "counts": {"type": "object", "additionalProperties": false, "required": ["Pass", "Fail", "Unknown", "NotApplicable", "Error", "NotImplemented", "ReviewRequired"], "properties": {"Pass": {"type": "integer", "minimum": 0}, "Fail": {"type": "integer", "minimum": 0}, "Unknown": {"type": "integer", "minimum": 0}, "NotApplicable": {"type": "integer", "minimum": 0}, "Error": {"type": "integer", "minimum": 0}, "NotImplemented": {"type": "integer", "minimum": 0}, "ReviewRequired": {"type": "integer", "minimum": 0}}}
+  },
+  "$defs": {
+    "identityLink": {
+      "type": "object", "additionalProperties": false, "required": ["id", "ad_entity_id", "cloud_entity_id", "method", "conflict", "evidence_refs"],
+      "properties": {"id": {"$ref": "finding-v2.schema.json#/$defs/id"}, "ad_entity_id": {"$ref": "finding-v2.schema.json#/$defs/id"}, "cloud_entity_id": {"$ref": "finding-v2.schema.json#/$defs/id"}, "method": {"$ref": "finding-v2.schema.json#/$defs/text"}, "conflict": {"type": "boolean"}, "evidence_refs": {"$ref": "finding-v2.schema.json#/$defs/evidenceRefs"}}
+    },
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "producer", "producer_version", "adapter_version", "collected_at", "scope", "sha256", "path", "completeness"],
+      "properties": {
+        "source_id": {"type": "string", "pattern": "^[a-z][a-z0-9_-]{0,63}$"}, "producer": {"$ref": "finding-v2.schema.json#/$defs/text"},
+        "producer_version": {"$ref": "finding-v2.schema.json#/$defs/text"}, "adapter_version": {"$ref": "finding-v2.schema.json#/$defs/text"},
+        "collected_at": {"type": "string", "format": "date-time"}, "scope": {"type": "object", "maxProperties": 100},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "path": {"$ref": "finding-v2.schema.json#/$defs/text"},
+        "completeness": {"oneOf": [{"enum": ["complete", "partial", "unknown"]}, {"type": "object", "additionalProperties": false, "required": ["complete", "capabilities"], "properties": {"complete": {"type": "boolean"}, "capabilities": {"type": "array", "maxItems": 1000, "items": {"$ref": "finding-v2.schema.json#/$defs/text"}}}}]},
+        "producer_schema": {"$ref": "finding-v2.schema.json#/$defs/text"},
+        "observation_window": {"type": "object", "additionalProperties": false, "required": ["oldest_at", "newest_at"], "properties": {"oldest_at": {"type": "string", "format": "date-time"}, "newest_at": {"type": "string", "format": "date-time"}}},
+        "collector_versions": {"$ref": "finding-v2.schema.json#/$defs/versions"},
+        "collection_errors": {"type": "array", "maxItems": 1000},
+        "exclusions": {"type": "array", "maxItems": 1000},
+        "observations": {"type": "array", "maxItems": 200000, "items": {"type": "object"}}
+      }
+    },
+    "entity": {
+      "type": "object", "additionalProperties": false, "required": ["id", "kind", "label", "properties", "evidence_refs"],
+      "properties": {
+        "id": {"$ref": "finding-v2.schema.json#/$defs/id"}, "kind": {"$ref": "finding-v2.schema.json#/$defs/text"},
+        "boundary": {"$ref": "finding-v2.schema.json#/$defs/id"}, "boundary_id": {"$ref": "finding-v2.schema.json#/$defs/id"},
+        "native_id": {"$ref": "finding-v2.schema.json#/$defs/id"}, "label": {"$ref": "finding-v2.schema.json#/$defs/text"},
+        "properties": {"type": "object", "maxProperties": 1000}, "evidence_refs": {"$ref": "finding-v2.schema.json#/$defs/evidenceRefs"}
+      }
+    },
+    "edge": {
+      "type": "object", "additionalProperties": false, "required": ["id", "source_id", "target_id", "type", "semantics", "evidence_refs"],
+      "properties": {
+        "id": {"$ref": "finding-v2.schema.json#/$defs/id"}, "source_id": {"$ref": "finding-v2.schema.json#/$defs/id"},
+        "target_id": {"$ref": "finding-v2.schema.json#/$defs/id"}, "type": {"$ref": "finding-v2.schema.json#/$defs/text"},
+        "semantics": {"$ref": "finding-v2.schema.json#/$defs/text"}, "evidence_refs": {"$ref": "finding-v2.schema.json#/$defs/evidenceRefs"},
+        "semantics_version": {"$ref": "finding-v2.schema.json#/$defs/text"},
+        "properties": {"type": "object", "maxProperties": 1000}, "prerequisites": {"$ref": "finding-v2.schema.json#/$defs/texts"},
+        "limitations": {"$ref": "finding-v2.schema.json#/$defs/texts"}
+      }
+    },
+    "evidence": {
+      "type": "object", "additionalProperties": false, "required": ["source_id", "pointer", "sha256"],
+      "properties": {
+        "source_id": {"$ref": "finding-v2.schema.json#/$defs/id"}, "pointer": {"type": "string", "maxLength": 2048, "pattern": "^(/([^~]|~[01])*)?$"},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "value": {}
+      }
+    },
+    "summaryAction": {
+      "type": "object", "additionalProperties": false,
+      "required": ["action_id", "title", "rationale", "breaks_edge_ids", "affected_entity_ids", "evidence_refs", "owner", "exception", "finding_ids", "path_ids", "cause_ids"],
+      "properties": {
+        "action_id": {"$ref": "finding-v2.schema.json#/$defs/id"}, "title": {"$ref": "finding-v2.schema.json#/$defs/text"}, "rationale": {"$ref": "finding-v2.schema.json#/$defs/text"},
+        "breaks_edge_ids": {"$ref": "finding-v2.schema.json#/$defs/ids"}, "affected_entity_ids": {"$ref": "finding-v2.schema.json#/$defs/ids"},
+        "evidence_refs": {"$ref": "finding-v2.schema.json#/$defs/evidenceRefs"}, "owner": {"type": ["string", "null"], "maxLength": 20000}, "exception": {"type": ["string", "null"], "maxLength": 20000},
+        "finding_ids": {"$ref": "finding-v2.schema.json#/$defs/ids"}, "path_ids": {"$ref": "finding-v2.schema.json#/$defs/ids"}, "cause_ids": {"$ref": "finding-v2.schema.json#/$defs/ids"}
+      }
+    }
+  }
+}
