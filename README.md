@@ -11,27 +11,70 @@
     |______|
 ```
 
-ScubaTank joins saved Microsoft cloud findings with AD identity, group and host authority. Reports show the evidence supporting each path and the permission changes that would break its required relationships.
+CISA's Secure Cloud Business Applications (SCuBA) project publishes secure configuration baselines and assessment tools. Its [ScubaGear](https://github.com/cisagov/ScubaGear) project covers Microsoft 365; [ScubaGoggles](https://github.com/cisagov/ScubaGoggles) covers Google Workspace. ScubaTank is an independent tool for correlating selected saved findings and identity evidence across Microsoft cloud and Active Directory. It joins stable AD identity, group membership, and host authority to cloud roles and grants using verified identity links.
 
-The offline workflow imports evidence, validates identity links, evaluates six hybrid correlations with OPA, and produces local HTML, JSON, CSV and Markdown reports. It requires no credentials to run the demonstration. Live collection and automatic remediation remain disabled.
+ScubaTank imports only consolidated ScubaGear 1.8.0 JSON, saved BloodHound CE 9.7.1 processed `POST /api/v2/graphs/cypher` responses with `include_properties: true`, and dated ScubaTank 1.0.0 operator evidence. It preserves upstream baseline findings and evaluates six bounded hybrid correlations. It does not import ScubaGoggles, raw SharpHound ZIPs, raw AzureHound JSON, or perform live collection.
 
-## Run the demonstration on Windows
+## Quick demo
 
-Install Python 3.12, clone this repository, and run from its root in Windows PowerShell 5.1 or PowerShell 7:
+Use Python 3.12 (the tested Windows version) and Windows PowerShell 5.1 or PowerShell 7. From the repository root, run:
 
 ```powershell
 .\scripts\Demo.ps1
 ```
 
-The first run creates a local `.venv`, installs the hash-locked Python wheels and obtains the hash-verified OPA 1.21.1 binary. Setup uses the network. The demonstration then runs offline against clearly labeled synthetic exports. Repeat it without setup:
+On first run, the script creates `.venv`, installs the hash-locked Python packages, and downloads the hash-verified OPA 1.21.1 binary. This setup needs network access. Later runs can skip setup:
 
 ```powershell
 .\scripts\Demo.ps1 -SkipBootstrap
 ```
 
-Open `.build/demo/reports/report.html`. The demo produces six exposure findings, one blocked path and five Unknown decisions. The report groups the findings into four permission changes while preserving each path. Its source drawer shows the original records, hashes, collection times and version pins. The other files are `report.json`, `findings.csv` and `report.md`; the imported bundle and assessment envelope sit beside the reports directory.
+The demo uses synthetic evidence. It writes `report.html`, `report.json`, `findings.csv`, and `report.md` to `.build/demo/reports`, with the bundle and assessment beside that directory. The supplied fixture produces six Fail, one Pass, and five Unknown decisions, grouped into four suggested actions. These are fixture results, not results from a live organization. Check the generated files and open the HTML report with:
 
-The demo results are reproducible synthetic tests. Live tenants, forests and collector deployments have not been validated.
+```powershell
+Get-ChildItem .build\demo\reports
+Invoke-Item .build\demo\reports\report.html
+```
+
+## Use your own saved evidence
+
+Keep authorized real exports in the ignored repository-root directory `private-input`; generated bundles, assessments, and reports go in the ignored `private-output` directory. Create a manifest from [`fixtures/demo/manifest.json`](fixtures/demo/manifest.json), then set `synthetic` to `false` and provide the producer version, scope, collection times, completeness metadata, and source file paths. The importer computes SHA-256 digests when you do not provide them. See [Import formats](docs/import-formats.md) for the accepted fields and evidence requirements, and [source pins](docs/source-pins.json) for publisher versions and digests.
+
+From the repository root, import and assess the manifest, retaining the original files so validation can reconstruct the bundle:
+
+```powershell
+Import-Module .\PowerShell\ScubaTank\ScubaTank.psd1
+Get-ScubaTankPlan
+
+Import-ScubaTankEvidence -ManifestPath .\private-input\manifest.json `
+    -OutputPath .\private-output\bundle.json
+Test-ScubaTankEvidence -Path .\private-output\bundle.json `
+    -EvidenceRoot .\private-input
+Invoke-ScubaTankAssessment -BundlePath .\private-output\bundle.json `
+    -EvidenceRoot .\private-input -OutputPath .\private-output\assessment.json `
+    -OpaPath .\.build\tools\opa.exe
+Export-ScubaTankReport -AssessmentPath .\private-output\assessment.json `
+    -OutputDirectory .\private-output\reports
+
+Get-ChildItem .\private-output\reports
+Invoke-Item .\private-output\reports\report.html
+```
+
+`Demo.ps1` performs setup. For a separate setup step, run `.\scripts\Bootstrap.ps1` before these commands. Import and assessment use local files and make no network requests. By default, evidence is evaluated against the current time with a 24-hour maximum age; missing, stale, conflicting, or out-of-scope evidence remains Unknown. A password-reset path does not establish MFA bypass, and one Conditional Access exclusion does not establish an effective bypass. For the equivalent Python CLI, use `.\.venv\Scripts\python.exe -m scubatank --help` on Windows after setup, or `.venv/bin/python` on Linux after installing locked dependencies. The Python/OPA core is exercised in Ubuntu 24.04 CI; this does not establish support for live collection on Linux. macOS is untested.
+
+## Tests
+
+After running `Demo.ps1` or `Bootstrap.ps1` for the locked Python dependencies and OPA, install the pinned Pester 5.7.1 test dependency. Then run the checks for the installed PowerShell shells and Python environment:
+
+```powershell
+.\scripts\Install-TestTools.ps1
+powershell.exe -NoProfile -File scripts\Test.ps1
+pwsh.exe -NoProfile -File scripts\Test.ps1
+.\.venv\Scripts\python.exe -m unittest discover -s tests -p 'test_*.py' -v
+.\.venv\Scripts\python.exe tools\catalog.py
+```
+
+`Install-TestTools.ps1` downloads the pinned dependency. Run only the PowerShell command for a shell installed on your machine.
 
 ## Implemented correlations
 
@@ -44,50 +87,8 @@ The demo results are reproducible synthetic tests. Live tenants, forests and col
 | `ST.CORR.GROUP.006` | A source-group edit changes an explicitly reviewed prospective MFA policy scenario, with no effective restoring policy |
 | `ST.CORR.APPLICATION.001` | A source-account reset path reaches an application owner with evidenced usable credential-write capability and sensitive app-only grants |
 
-The catalog still contains 100 correlation and 32 posture specifications. The remaining 126 entries are not detectors and are excluded from assessment results. ScubaGear's original posture findings are preserved separately; ScubaTank does not relabel those as its own implemented posture checks.
+The catalog contains 100 correlation and 32 posture specifications; the other 126 entries are not detectors and do not appear as assessment results. ScubaGear findings remain separate from ScubaTank's six implemented correlations. Missing facts, conflicting stable identities, stale evidence, or incomplete scope produce Unknown; a Pass disproves one scoped predicate with complete required evidence. Overall coverage is partial.
 
-Password reset does not establish MFA bypass. One Conditional Access exclusion does not establish an effective bypass. Missing, stale, conflicting or unsupported evidence produces Unknown. A Pass disproves one scoped predicate with complete required evidence; the report keeps overall coverage partial.
+The manifest and normalized bundle use versioned schemas. Assessment reconstructs the bundle from the original manifest and files; edited normalized records fail that comparison. The importer retains source records, hashes, collection times, versions, exclusions, and evidence pointers. It does not execute imported content or fetch URLs from it. Sensitive real exports belong outside Git. See [report contract](docs/report-contract.md) and [rule review](docs/rule-review.md).
 
-## Import authorized local exports
-
-The admitted formats are ScubaGear 1.8.0 consolidated JSON, a saved BloodHound CE 9.7.1 processed Cypher graph response, and ScubaTank 1.0.0 assisted-evidence records. Raw SharpHound ZIP and AzureHound collector JSON are not interchangeable with the processed graph route. [Import formats](docs/import-formats.md) documents exact fields, collection windows, stable identity links and declared coverage. [Source pins](docs/source-pins.json) records publisher commits and digests.
-
-```powershell
-Import-Module .\PowerShell\ScubaTank\ScubaTank.psd1
-Get-ScubaTankPlan
-Import-ScubaTankEvidence -ManifestPath C:\Assessments\Example\manifest.json -OutputPath .build\bundle.json
-Test-ScubaTankEvidence -Path .build\bundle.json -EvidenceRoot C:\Assessments\Example
-Invoke-ScubaTankAssessment -BundlePath .build\bundle.json -EvidenceRoot C:\Assessments\Example -OutputPath .build\assessment.json
-Export-ScubaTankReport -AssessmentPath .build\assessment.json -OutputDirectory .build\reports
-```
-
-Assessment reconstructs the normalized bundle from its original manifest and source files. An edited normalized record fails that comparison. Without the original evidence root, all decisions remain Unknown. Imports accept local disk files, make no outbound requests, and never execute source content. Sensitive real exports belong outside Git.
-
-The equivalent CLI runs from the repository root using the Python environment created by bootstrap. On Windows, replace `python` below with `.\.venv\Scripts\python.exe`; on Linux, use `.venv/bin/python` after installing the locked dependencies.
-
-Interactive invocations show the tank banner on stderr. Redirecting or piping any stream suppresses it, so stdout remains clean JSON. Use `--quiet` before or after the command to hide the banner while keeping the result, for example `python -m scubatank plan --quiet`.
-
-```text
-python -m scubatank plan
-python -m scubatank import --manifest fixtures/demo/manifest.json --output .build/bundle.json
-python -m scubatank validate .build/bundle.json --evidence-root fixtures/demo
-python -m scubatank assess --bundle .build/bundle.json --evidence-root fixtures/demo --as-of 2026-10-02T08:00:00Z --output .build/assessment.json
-python -m scubatank report --assessment .build/assessment.json --output-dir .build/reports
-```
-
-The explicit setup command is `python -m scubatank.bootstrap --output-dir .build/tools`, after installing `requirements.lock` with `--require-hashes --only-binary=:all:`. The Windows script handles both steps. Windows Python 3.12, Windows PowerShell 5.1 and PowerShell 7 are tested locally. The Python/OPA core also passes hosted Ubuntu 24.04 tests. macOS OPA artifacts are pinned but execution remains untested. See [Windows workflow](docs/windows-workflow.md) and [validation](docs/validation.md) for the tested versions and hosted CI result.
-
-## Run the tests
-
-```powershell
-.\scripts\Install-TestTools.ps1
-.\scripts\Test.ps1
-.\.venv\Scripts\python.exe -m unittest discover -s tests -p "test_*.py" -v
-.\.venv\Scripts\python.exe tools/catalog.py
-```
-
-The tests cover native-shaped imports, schema compatibility, path/hash/reference validation, identity conflicts, all six joined predicates and limiting cases, freshness, denial qualifiers, report traceability and safe output. [Report contract](docs/report-contract.md) describes the versioned envelope. [Rule review](docs/rule-review.md) records the independent semantic review and proposed framework mappings.
-
-At operation time, confirm authorized collection scope, the actual producer versions, contributing collection windows and the operational context the exports cannot supply. Use established collectors under their own approved permissions. ScubaTank does not collect credentials, probe a live organization or apply the reported changes.
-
-ScubaTank is an independent project maintained by Lee Payton. Product names identify sources; they imply no endorsement. See [third-party notices](THIRD_PARTY_NOTICES.md).
+ScubaTank is an independent project maintained by Lee Payton. Product names identify sources and do not imply endorsement. See [third-party notices](THIRD_PARTY_NOTICES.md) for licenses and notices.
