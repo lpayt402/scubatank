@@ -48,13 +48,13 @@ The fixed-time demo produced 12 decisions: six Fail, one Pass and five Unknown. 
 
 An offline browser check of the final HTML passed with Playwright 1.62.0 and Chromium 151.0.7922.34. It tested every status filter, search reset, keyboard disclosure, evidence expansion, fragment targets and a 390-pixel viewport. There were zero external requests, browser errors or broken fragment targets. Screenshots and the check receipt are generated under `.build/demo/browser-smoke`.
 
-## Hosted workflow diagnosis
+## Hosted workflow validation
 
-The earlier run [37002563734](https://github.com/lpayt402/ScubaTank-prep/actions/runs/37002563734) failed before creating jobs. Inspection with actionlint 1.7.12 identified an invalid expression at line 28: `shell: ${{ matrix.shell }}` used a context that GitHub does not permit in `steps.shell`. The revised workflow uses explicit `powershell` and `pwsh` steps. Actionlint validates that workflow. There is no evidence attributing the historical failure to billing.
+The workflow pins checkout/setup-python revisions, Python dependency hashes, Pester, and OPA artifacts. It uses explicit `powershell` and `pwsh` steps. The recorded actionlint 1.7.12 check passed.
 
-The new workflow pins checkout/setup-python revisions, Python dependency hashes, Pester and OPA artifacts. [Run 37012147435](https://github.com/lpayt402/ScubaTank-prep/actions/runs/37012147435) passed both jobs for commit `5049823578a39f9fb534d2c2e01f11ef8920a56a`. Ubuntu 24.04 passed all 140 Python tests, catalog generation and the offline demo. Windows Server 2022 passed all 140 Python tests, all 19 Pester tests in each configured PowerShell edition, and both shell demonstrations.
+The recorded workflow validation for commit `5049823578a39f9fb534d2c2e01f11ef8920a56a` passed both jobs. Ubuntu 24.04 passed all 140 Python tests, catalog generation, and the offline demo. Windows Server 2022 passed all 140 Python tests, all 19 Pester tests in each configured PowerShell edition, and both shell demonstrations.
 
-The first revised run reached both runners. Linux passed; Windows exposed a test assertion comparing the short and long spellings of the same temporary path. The assertion now compares canonical paths without changing runtime behavior or removing digest/network checks. The successful run above verifies that correction. Current commit status is available in [Actions](https://github.com/lpayt402/scubatank/actions).
+The Windows test assertion compares canonical temporary paths. That correction did not change runtime behavior or remove digest/network checks. Current commit status is available in [Actions](https://github.com/lpayt402/scubatank/actions).
 
 ## Validation scope
 
