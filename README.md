@@ -11,7 +11,9 @@
     |______|
 ```
 
-CISA's Secure Cloud Business Applications (SCuBA) project publishes secure configuration baselines and assessment tools. Its [ScubaGear](https://github.com/cisagov/ScubaGear) project covers Microsoft 365; [ScubaGoggles](https://github.com/cisagov/ScubaGoggles) covers Google Workspace. ScubaTank is an independent tool for correlating selected saved findings and identity evidence across Microsoft cloud and Active Directory. It joins stable AD identity, group membership, and host authority to cloud roles and grants using verified identity links.
+ScubaTank helps administrators review hybrid security risks by correlating selected saved Microsoft cloud and Active Directory findings and identity evidence. It joins stable AD identity, group membership, and host authority to cloud roles and grants using verified identity links.
+
+CISA's Secure Cloud Business Applications (SCuBA) project publishes secure configuration baselines and assessment tools. Its [ScubaGear](https://github.com/cisagov/ScubaGear) project covers Microsoft 365; [ScubaGoggles](https://github.com/cisagov/ScubaGoggles) covers Google Workspace.
 
 ScubaTank imports only consolidated ScubaGear 1.8.0 JSON, saved BloodHound CE 9.7.1 processed `POST /api/v2/graphs/cypher` responses with `include_properties: true`, and dated ScubaTank 1.0.0 operator evidence. It preserves upstream baseline findings and evaluates six bounded hybrid correlations. It does not import ScubaGoggles, raw SharpHound ZIPs, raw AzureHound JSON, or perform live collection.
 
