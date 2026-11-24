@@ -35,6 +35,22 @@ Get-ChildItem .build\demo\reports
 Invoke-Item .build\demo\reports\report.html
 ```
 
+<details>
+<summary>ScubaTank CLI banner</summary>
+
+```text
+          o
+       o
+      _||_
+     /____\       ScubaTank
+    |      |---.  Hybrid security assessment
+    |      |   |
+    |      |   '---[o]
+    |______|
+```
+
+</details>
+
 ## Use your own saved evidence
 
 Keep authorized real exports in the ignored repository-root directory `private-input`; generated bundles, assessments, and reports go in the ignored `private-output` directory. Create a manifest from [`fixtures/demo/manifest.json`](fixtures/demo/manifest.json), then set `synthetic` to `false` and provide the producer version, scope, collection times, completeness metadata, and source file paths. The importer computes SHA-256 digests when you do not provide them. See [Import formats](docs/import-formats.md) for the accepted fields and evidence requirements, and [source pins](docs/source-pins.json) for publisher versions and digests.
