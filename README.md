@@ -1,23 +1,20 @@
 # scuba TANK (trust assurance and normalization kit)
 
-```text
-          o
-       o
-      _||_
-     /____\       ScubaTank
-    |      |---.  Hybrid security assessment
-    |      |   |
-    |      |   '---[o]
-    |______|
-```
+ScubaTank reviews security risks that span Microsoft 365 and Active Directory using saved evidence, without connecting to either environment. It keeps the original findings intact and reports Pass, Fail, or Unknown for each check, with Unknown when the evidence is incomplete.
 
-ScubaTank helps administrators review hybrid security risks by correlating selected saved Microsoft cloud and Active Directory findings and identity evidence. It joins stable AD identity, group membership, and host authority to cloud roles and grants using verified identity links.
+[See the fictional report and run the demo](#quick-demo).
+
+## What it reads
 
 CISA's Secure Cloud Business Applications (SCuBA) project publishes secure configuration baselines and assessment tools. Its [ScubaGear](https://github.com/cisagov/ScubaGear) project covers Microsoft 365; [ScubaGoggles](https://github.com/cisagov/ScubaGoggles) covers Google Workspace.
 
 ScubaTank imports only consolidated ScubaGear 1.8.0 JSON, saved BloodHound CE 9.7.1 processed `POST /api/v2/graphs/cypher` responses with `include_properties: true`, and dated ScubaTank 1.0.0 operator evidence. It preserves upstream baseline findings and evaluates six bounded hybrid correlations. It does not import ScubaGoggles, raw SharpHound ZIPs, raw AzureHound JSON, or perform live collection.
 
 ## Quick demo
+
+![ScubaTank synthetic HTML report showing partial coverage and three decision counts: six Fail, one Pass, and five Unknown](docs/images/scubatank-synthetic-report.png)
+
+The screenshot shows the built-in fictional evidence, not an assessment of a real organization. It uses the same synthetic demo that runs in the Ubuntu CI job.
 
 Use Python 3.12 (the tested Windows version) and Windows PowerShell 5.1 or PowerShell 7. From the repository root, run:
 
@@ -37,6 +34,22 @@ The demo uses synthetic evidence. It writes `report.html`, `report.json`, `findi
 Get-ChildItem .build\demo\reports
 Invoke-Item .build\demo\reports\report.html
 ```
+
+<details>
+<summary>ScubaTank CLI banner</summary>
+
+```text
+          o
+       o
+      _||_
+     /____\       ScubaTank
+    |      |---.  Hybrid security assessment
+    |      |   |
+    |      |   '---[o]
+    |______|
+```
+
+</details>
 
 ## Use your own saved evidence
 
